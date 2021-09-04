@@ -29,8 +29,9 @@ public class UserInfoService {
     }
 
     public UserInfo getUserInfo(String username) {
-        return getUserInfo(username);
+        return userInfoRepository.findByUsername(username);
     }
+
 
     public UserInfo register(UserInfoRegistrationDTO dto) throws ActionNotAllowed {
 
@@ -48,7 +49,7 @@ public class UserInfoService {
         return jwtTokenUtil.getUsernameFromToken(token);
     }
 
-    private UserInfo getMyUserInfo() {
+    public UserInfo getMyUserInfo() {
         String myUsername = getUsername();
         return getUserInfo(myUsername);
     }
