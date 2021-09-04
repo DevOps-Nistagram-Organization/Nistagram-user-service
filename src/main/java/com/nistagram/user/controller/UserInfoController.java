@@ -27,6 +27,20 @@ public class UserInfoController {
         this.userInfoService = userInfoService;
     }
 
+    @GetMapping(value = "getUser/{username}")
+    public ResponseEntity<UserInfoDTO> getUserinfo(@PathVariable(value = "username") String username) {
+        UserInfo userInfo = userInfoService.getUserInfo(username);
+        UserInfoDTO userInfoDTO = UserInfoConverter.toDTO(userInfo);
+        return new ResponseEntity<>(userInfoDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "getMyInfo")
+    public ResponseEntity<UserInfoDTO> getMyUserinfo() {
+        UserInfo userInfo = userInfoService.getMyUserInfo();
+        UserInfoDTO userInfoDTO = UserInfoConverter.toDTO(userInfo);
+        return new ResponseEntity<>(userInfoDTO, HttpStatus.OK);
+    }
+
     @PostMapping(value = "saveUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserInfoDTO> saveUser(@RequestBody() UserInfoRegistrationDTO dto, @RequestHeader("Authorization") String bearerToken) throws ActionNotAllowed {
         UserInfo userInfo = userInfoService.register(dto);
