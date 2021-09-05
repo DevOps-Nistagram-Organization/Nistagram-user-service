@@ -46,4 +46,40 @@ public class UserInfoController {
         UserInfo userInfo = userInfoService.register(dto);
         return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
     }
+
+    @PostMapping(value = "follow")
+    public ResponseEntity<UserInfoDTO> follow(@RequestBody() UsernameWrapper username) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.follow(username.getUsername());
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "unfollow")
+    public ResponseEntity<UserInfoDTO> unfollow(@RequestBody() UsernameWrapper username) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.unfollow(username.getUsername());
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "send-follow-request")
+    public ResponseEntity<UserInfoDTO> sendFollowRequest(@RequestBody() UsernameWrapper username) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.sendFollowRequest(username.getUsername());
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "remove-follow-request")
+    public ResponseEntity<UserInfoDTO> removeFollowRequest(@RequestBody() UsernameWrapper username) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.removeFollowRequest(username.getUsername());
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "accept-follow-request")
+    public ResponseEntity<UserInfoDTO> acceptFollowRequest(@RequestBody() UsernameWrapper username) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.acceptFollowRequest(username.getUsername());
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "reject-follow-request")
+    public ResponseEntity<UserInfoDTO> rejectFollowRequest(@RequestBody() UsernameWrapper username) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.rejectFollowRequest(username.getUsername());
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
 }
