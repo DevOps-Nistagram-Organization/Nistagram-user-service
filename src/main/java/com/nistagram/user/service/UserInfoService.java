@@ -46,12 +46,89 @@ public class UserInfoService {
 
     private String getUsername() {
         String token = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
-        return jwtTokenUtil.getUsernameFromToken(token);
+        String jwtToken = token.substring(7);
+        return jwtTokenUtil.getUsernameFromToken(jwtToken);
     }
 
     public UserInfo getMyUserInfo() {
         String myUsername = getUsername();
         return getUserInfo(myUsername);
+    }
+
+    public UserInfo follow(String username) throws ActionNotAllowed {
+        UserInfo myInfo = getMyUserInfo();
+        UserInfo followingUserInfo = getUserInfo(username);
+        if (followingUserInfo.getPublicProfile()) {
+            myInfo.getFollowing().add(followingUserInfo);
+            followingUserInfo.getFollowers().add(myInfo);
+            userInfoRepository.save(myInfo);
+            userInfoRepository.save(followingUserInfo);
+        } else {
+            throw new ActionNotAllowed();
+        }
+        return myInfo;
+    }
+
+    public UserInfo unfollow(String username) {
+        UserInfo myInfo = getMyUserInfo();
+        UserInfo followingUserInfo = getUserInfo(username);
+        if (followingUserInfo.getFollowers().contains(myInfo) || myInfo.getFollowing().contains(followingUserInfo)) {
+            myInfo.getFollowing().remove(followingUserInfo);
+            followingUserInfo.getFollowers().remove(myInfo);
+            userInfoRepository.save(myInfo);
+            userInfoRepository.save(followingUserInfo);
+        }
+        return myInfo;
+    }
+
+    public UserInfo sendFollowRequest(String username) {
+        UserInfo myInfo = getMyUserInfo();
+        UserInfo followingUserInfo = getUserInfo(username);
+        if (!followingUserInfo.getFollowers().contains(myInfo) && !myInfo.getSentFollowRequests().contains(followingUserInfo) && !followingUserInfo.getPublicProfile()) {
+            myInfo.getSentFollowRequests().add(followingUserInfo);
+            followingUserInfo.getReceivedFollowRequests().add(myInfo);
+            userInfoRepository.save(myInfo);
+            userInfoRepository.save(followingUserInfo);
+        }
+        return myInfo;
+    }
+
+    public UserInfo removeFollowRequest(String username) {
+        UserInfo myInfo = getMyUserInfo();
+        UserInfo followingUserInfo = getUserInfo(username);
+        if (myInfo.getSentFollowRequests().contains(followingUserInfo)) {
+            myInfo.getSentFollowRequests().remove(followingUserInfo);
+            followingUserInfo.getReceivedFollowRequests().remove(myInfo);
+            userInfoRepository.save(myInfo);
+            userInfoRepository.save(followingUserInfo);
+        }
+        return myInfo;
+    }
+
+    public UserInfo acceptFollowRequest(String username) {
+        UserInfo myInfo = getMyUserInfo();
+        UserInfo followingUserInfo = getUserInfo(username);
+        if (myInfo.getReceivedFollowRequests().contains(followingUserInfo)) {
+            myInfo.getReceivedFollowRequests().remove(followingUserInfo);
+            followingUserInfo.getSentFollowRequests().remove(myInfo);
+            myInfo.getFollowers().add(followingUserInfo);
+            followingUserInfo.getFollowing().add(myInfo);
+            userInfoRepository.save(myInfo);
+            userInfoRepository.save(followingUserInfo);
+        }
+        return myInfo;
+    }
+
+    public UserInfo rejectFollowRequest(String username) {
+        UserInfo myInfo = getMyUserInfo();
+        UserInfo followingUserInfo = getUserInfo(username);
+        if (myInfo.getReceivedFollowRequests().contains(followingUserInfo)) {
+            myInfo.getReceivedFollowRequests().remove(followingUserInfo);
+            followingUserInfo.getSentFollowRequests().remove(myInfo);
+            userInfoRepository.save(myInfo);
+            userInfoRepository.save(followingUserInfo);
+        }
+        return myInfo;
     }
 
 }
