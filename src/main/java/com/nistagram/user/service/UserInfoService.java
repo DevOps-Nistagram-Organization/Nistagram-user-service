@@ -130,5 +130,13 @@ public class UserInfoService {
         }
         return myInfo;
     }
-
+    public Set<UserInfo> search(SearchDTO searchDTO) {
+        Set<UserInfo> result = new HashSet<>();
+        Arrays.stream(searchDTO.getName().split(" ")).forEach(s -> {
+                    result.addAll(userInfoRepository.findAllByFirstNameContaining(s));
+                    result.addAll(userInfoRepository.findAllByLastNameContaining(s));
+                }
+        );
+        return result;
+    }
 }
