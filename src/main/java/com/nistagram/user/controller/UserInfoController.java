@@ -89,4 +89,10 @@ public class UserInfoController {
         List<UserInfoDTO> resultDTO = result.stream().map(UserInfoConverter::toBasicDTO).collect(Collectors.toList());
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
+
+    @PutMapping(value = "edit")
+    public ResponseEntity<UserInfoDTO> editInfo(@RequestBody() UserInfoDTO dto) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.editInfo(dto);
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
 }

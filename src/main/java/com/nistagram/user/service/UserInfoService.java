@@ -139,4 +139,18 @@ public class UserInfoService {
         );
         return result;
     }
+
+    public UserInfo editInfo(UserInfoDTO dto) throws ActionNotAllowed {
+        UserInfo existingUserInfo = getMyUserInfo();
+        if (getUsername().equals(dto.getUsername())) {
+            UserInfo userInfo = UserInfoConverter.basicConversionToUserInfo(dto);
+            userInfo.setFollowers(existingUserInfo.getFollowers());
+            userInfo.setAgent(existingUserInfo.getAgent());
+            userInfo.setFollowing(existingUserInfo.getFollowing());
+            userInfo.setReceivedFollowRequests(existingUserInfo.getReceivedFollowRequests());
+            userInfo.setSentFollowRequests(existingUserInfo.getSentFollowRequests());
+            return userInfoRepository.save(UserInfoConverter.toUserInfo(dto));
+        }
+        throw new ActionNotAllowed();
+    }
 }
