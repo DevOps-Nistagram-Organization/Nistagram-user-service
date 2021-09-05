@@ -82,4 +82,11 @@ public class UserInfoController {
         UserInfo userInfo = userInfoService.rejectFollowRequest(username.getUsername());
         return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
     }
+
+    @PostMapping(value = "search")
+    public ResponseEntity<List<UserInfoDTO>> search(@RequestBody() SearchDTO searchDTO) throws ActionNotAllowed {
+        Set<UserInfo> result = userInfoService.search(searchDTO);
+        List<UserInfoDTO> resultDTO = result.stream().map(UserInfoConverter::toBasicDTO).collect(Collectors.toList());
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
 }
