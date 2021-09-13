@@ -89,4 +89,29 @@ public class UserInfoController {
         List<UserInfoDTO> resultDTO = result.stream().map(UserInfoConverter::toBasicDTO).collect(Collectors.toList());
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
+
+    @PutMapping(value = "edit")
+    public ResponseEntity<UserInfoDTO> editInfo(@RequestBody() UserInfoDTO dto) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.editInfo(dto);
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "getNotApprovedAgents")
+    public ResponseEntity<List<UserInfoDTO>> getNotApprovedAgents() {
+        List<UserInfo> agents = userInfoService.getNotApprovedAgents();
+        List<UserInfoDTO> userInfoDTOS = agents.stream().map(UserInfoConverter::toDTO).collect(Collectors.toList());
+        return new ResponseEntity<>(userInfoDTOS, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "approveAgent")
+    public ResponseEntity<UserInfoDTO> approveAgent(@RequestBody() UsernameWrapper dto) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.approveAgent(dto);
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "rejectAgent")
+    public ResponseEntity<UserInfoDTO> rejectAgent(@RequestBody() UsernameWrapper dto) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.rejectAgent(dto);
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
 }
