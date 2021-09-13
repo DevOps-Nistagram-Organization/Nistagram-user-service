@@ -9,4 +9,5 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
     UserInfo findByUsername(String username);
     List<UserInfo> findAllByFirstNameContaining(String firstName);
     List<UserInfo> findAllByLastNameContaining(String lastName);
+    List<UserInfo> findByAgentAndApprovedAgent(Boolean agent, Boolean approved);
 }
