@@ -16,6 +16,7 @@ public class UserInfoRegistrationDTO {
     private String lastName;
     private String email;
     private String gender;
+    private String website;
     private Date dateOfBirth;
     private Boolean agent;
 
@@ -86,5 +87,13 @@ public class UserInfoRegistrationDTO {
 
     public void setAgent(Boolean agent) {
         this.agent = agent;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
     }
 }
