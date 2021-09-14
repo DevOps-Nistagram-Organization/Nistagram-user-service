@@ -114,4 +114,19 @@ public class UserInfoController {
         UserInfo userInfo = userInfoService.rejectAgent(dto);
         return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
     }
+    @PostMapping(value = "mute")
+    public ResponseEntity<UserInfoDTO> muteUser(@RequestBody() UsernameWrapper dto) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.muteUser(dto);
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
+    @PostMapping(value = "unmute")
+    public ResponseEntity<UserInfoDTO> unmuteUser(@RequestBody() UsernameWrapper dto) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.unmuteUser(dto);
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
+    @PostMapping(value = "block")
+    public ResponseEntity<UserInfoDTO> blockUser(@RequestBody() UsernameWrapper dto) throws ActionNotAllowed {
+        UserInfo userInfo = userInfoService.blockUser(dto);
+        return new ResponseEntity<>(UserInfoConverter.toDTO(userInfo), HttpStatus.OK);
+    }
 }

@@ -59,6 +59,7 @@ public class UserInfoService {
     public UserInfo follow(String username) throws ActionNotAllowed {
         UserInfo myInfo = getMyUserInfo();
         UserInfo followingUserInfo = getUserInfo(username);
+        blockActionIfNeeded(myInfo, followingUserInfo);
         if (followingUserInfo.getPublicProfile()) {
             myInfo.getFollowing().add(followingUserInfo);
             followingUserInfo.getFollowers().add(myInfo);
@@ -70,9 +71,10 @@ public class UserInfoService {
         return myInfo;
     }
 
-    public UserInfo unfollow(String username) {
+    public UserInfo unfollow(String username) throws ActionNotAllowed {
         UserInfo myInfo = getMyUserInfo();
         UserInfo followingUserInfo = getUserInfo(username);
+        blockActionIfNeeded(myInfo, followingUserInfo);
         if (followingUserInfo.getFollowers().contains(myInfo) || myInfo.getFollowing().contains(followingUserInfo)) {
             myInfo.getFollowing().remove(followingUserInfo);
             followingUserInfo.getFollowers().remove(myInfo);
@@ -82,9 +84,10 @@ public class UserInfoService {
         return myInfo;
     }
 
-    public UserInfo sendFollowRequest(String username) {
+    public UserInfo sendFollowRequest(String username) throws ActionNotAllowed {
         UserInfo myInfo = getMyUserInfo();
         UserInfo followingUserInfo = getUserInfo(username);
+        blockActionIfNeeded(myInfo, followingUserInfo);
         if (!followingUserInfo.getFollowers().contains(myInfo) && !myInfo.getSentFollowRequests().contains(followingUserInfo) && !followingUserInfo.getPublicProfile()) {
             myInfo.getSentFollowRequests().add(followingUserInfo);
             followingUserInfo.getReceivedFollowRequests().add(myInfo);
@@ -94,9 +97,10 @@ public class UserInfoService {
         return myInfo;
     }
 
-    public UserInfo removeFollowRequest(String username) {
+    public UserInfo removeFollowRequest(String username) throws ActionNotAllowed {
         UserInfo myInfo = getMyUserInfo();
         UserInfo followingUserInfo = getUserInfo(username);
+        blockActionIfNeeded(myInfo, followingUserInfo);
         if (myInfo.getSentFollowRequests().contains(followingUserInfo)) {
             myInfo.getSentFollowRequests().remove(followingUserInfo);
             followingUserInfo.getReceivedFollowRequests().remove(myInfo);
@@ -106,9 +110,10 @@ public class UserInfoService {
         return myInfo;
     }
 
-    public UserInfo acceptFollowRequest(String username) {
+    public UserInfo acceptFollowRequest(String username) throws ActionNotAllowed {
         UserInfo myInfo = getMyUserInfo();
         UserInfo followingUserInfo = getUserInfo(username);
+        blockActionIfNeeded(myInfo, followingUserInfo);
         if (myInfo.getReceivedFollowRequests().contains(followingUserInfo)) {
             myInfo.getReceivedFollowRequests().remove(followingUserInfo);
             followingUserInfo.getSentFollowRequests().remove(myInfo);
@@ -120,9 +125,10 @@ public class UserInfoService {
         return myInfo;
     }
 
-    public UserInfo rejectFollowRequest(String username) {
+    public UserInfo rejectFollowRequest(String username) throws ActionNotAllowed {
         UserInfo myInfo = getMyUserInfo();
         UserInfo followingUserInfo = getUserInfo(username);
+        blockActionIfNeeded(myInfo, followingUserInfo);
         if (myInfo.getReceivedFollowRequests().contains(followingUserInfo)) {
             myInfo.getReceivedFollowRequests().remove(followingUserInfo);
             followingUserInfo.getSentFollowRequests().remove(myInfo);
@@ -131,6 +137,7 @@ public class UserInfoService {
         }
         return myInfo;
     }
+
     public Set<UserInfo> search(SearchDTO searchDTO) {
         Set<UserInfo> result = new HashSet<>();
         Arrays.stream(searchDTO.getName().split(" ")).forEach(s -> {
@@ -171,4 +178,42 @@ public class UserInfoService {
         return userInfoRepository.save(userInfo);
     }
 
+    public UserInfo muteUser(UsernameWrapper usernameWrapper) {
+        UserInfo myInfo = getMyUserInfo();
+        UserInfo otherInfo = getUserInfo(usernameWrapper.getUsername());
+        myInfo.getMutedUsers().add(otherInfo);
+        return userInfoRepository.save(myInfo);
+    }
+
+    public UserInfo unmuteUser(UsernameWrapper usernameWrapper) {
+        UserInfo myInfo = getMyUserInfo();
+        UserInfo otherInfo = getUserInfo(usernameWrapper.getUsername());
+        myInfo.getMutedUsers().remove(otherInfo);
+        return userInfoRepository.save(myInfo);
+    }
+
+    public UserInfo blockUser(UsernameWrapper usernameWrapper) {
+        UserInfo myInfo = getMyUserInfo();
+        UserInfo otherInfo = getUserInfo(usernameWrapper.getUsername());
+        myInfo.getBlockedUsers().add(otherInfo);
+        myInfo.getMutedUsers().remove(otherInfo);
+        myInfo.getFollowers().remove(otherInfo);
+        myInfo.getFollowing().remove(otherInfo);
+        myInfo.getSentFollowRequests().remove(otherInfo);
+        myInfo.getReceivedFollowRequests().remove(otherInfo);
+
+        otherInfo.getMutedUsers().remove(myInfo);
+        otherInfo.getFollowers().remove(myInfo);
+        otherInfo.getFollowing().remove(myInfo);
+        otherInfo.getSentFollowRequests().remove(myInfo);
+        otherInfo.getReceivedFollowRequests().remove(myInfo);
+        userInfoRepository.save(otherInfo);
+        return userInfoRepository.save(myInfo);
+    }
+
+    private void blockActionIfNeeded(UserInfo myInfo, UserInfo otherInfo) throws ActionNotAllowed {
+        if(myInfo.getBlockedUsers().contains(otherInfo) || otherInfo.getBlockedUsers().contains(myInfo)) {
+            throw new ActionNotAllowed();
+        }
+    }
 }
