@@ -48,7 +48,10 @@ public class UserInfo {
     private Set<UserInfo> sentFollowRequests;
     @ManyToMany
     private Set<UserInfo> receivedFollowRequests;
-
+    @ManyToMany
+    private Set<UserInfo> mutedUsers;
+    @ManyToMany
+    private Set<UserInfo> blockedUsers;
 
     public UserInfo() {
     }
@@ -225,5 +228,21 @@ public class UserInfo {
 
     public void setApprovedAgent(Boolean approvedAgent) {
         this.approvedAgent = approvedAgent;
+    }
+
+    public Set<UserInfo> getMutedUsers() {
+        return mutedUsers;
+    }
+
+    public void setMutedUsers(Set<UserInfo> mutedUsers) {
+        this.mutedUsers = mutedUsers;
+    }
+
+    public Set<UserInfo> getBlockedUsers() {
+        return blockedUsers;
+    }
+
+    public void setBlockedUsers(Set<UserInfo> blockedUsers) {
+        this.blockedUsers = blockedUsers;
     }
 }

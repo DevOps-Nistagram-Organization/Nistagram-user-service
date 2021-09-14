@@ -115,6 +115,12 @@ public class UserInfoConverter {
         if (info.getSentFollowRequests() != null) {
             userInfoDTO.setSentFollowRequests(info.getSentFollowRequests().stream().map(UserInfoConverter::toBasicDTO).collect(Collectors.toSet()));
         }
+        if (info.getMutedUsers() != null) {
+            userInfoDTO.setMutedUsers(info.getMutedUsers().stream().map(UserInfoConverter::toBasicDTO).collect(Collectors.toSet()));
+        }
+        if (info.getBlockedUsers() != null) {
+            userInfoDTO.setBlockedUsers(info.getBlockedUsers().stream().map(UserInfoConverter::toBasicDTO).collect(Collectors.toSet()));
+        }
         return userInfoDTO;
     }
 

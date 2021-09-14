@@ -1,5 +1,8 @@
 package com.nistagram.user.model.dto;
 
+import com.nistagram.user.model.entity.UserInfo;
+
+import javax.persistence.ManyToMany;
 import java.util.Date;
 import java.util.Set;
 
@@ -25,6 +28,8 @@ public class UserInfoDTO {
     private Set<UserInfoDTO> following;
     private Set<UserInfoDTO> sentFollowRequests;
     private Set<UserInfoDTO> receivedFollowRequests;
+    private Set<UserInfoDTO> mutedUsers;
+    private Set<UserInfoDTO> blockedUsers;
 
     public UserInfoDTO(Long id, String username, String firstName, String lastName, String email, String phone, String gender, Date dateOfBirth, String website, String biography, Boolean agent, Set<UserInfoDTO> followers, Set<UserInfoDTO> following, Set<UserInfoDTO> sentFollowRequests, Set<UserInfoDTO> receivedFollowRequests, String imagePath, Boolean publicProfile) {
         this.id = id;
@@ -191,5 +196,21 @@ public class UserInfoDTO {
 
     public void setApprovedAgent(Boolean approvedAgent) {
         this.approvedAgent = approvedAgent;
+    }
+
+    public Set<UserInfoDTO> getMutedUsers() {
+        return mutedUsers;
+    }
+
+    public void setMutedUsers(Set<UserInfoDTO> mutedUsers) {
+        this.mutedUsers = mutedUsers;
+    }
+
+    public Set<UserInfoDTO> getBlockedUsers() {
+        return blockedUsers;
+    }
+
+    public void setBlockedUsers(Set<UserInfoDTO> blockedUsers) {
+        this.blockedUsers = blockedUsers;
     }
 }
