@@ -19,6 +19,7 @@ public class UserInfoDTO {
     private Boolean agent;
     private String imagePath;
     private Boolean publicProfile;
+    private Boolean approvedAgent;
 
     private Set<UserInfoDTO> followers;
     private Set<UserInfoDTO> following;
@@ -182,5 +183,13 @@ public class UserInfoDTO {
 
     public void setPublicProfile(Boolean publicProfile) {
         this.publicProfile = publicProfile;
+    }
+
+    public Boolean getApprovedAgent() {
+        return approvedAgent;
+    }
+
+    public void setApprovedAgent(Boolean approvedAgent) {
+        this.approvedAgent = approvedAgent;
     }
 }

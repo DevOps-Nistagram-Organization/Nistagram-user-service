@@ -6,10 +6,10 @@ import com.nistagram.user.exceptions.ActionNotAllowed;
 import com.nistagram.user.model.dto.SearchDTO;
 import com.nistagram.user.model.dto.UserInfoDTO;
 import com.nistagram.user.model.dto.UserInfoRegistrationDTO;
+import com.nistagram.user.model.dto.UsernameWrapper;
 import com.nistagram.user.model.entity.UserInfo;
 import com.nistagram.user.reposiotry.UserInfoRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -153,4 +153,21 @@ public class UserInfoService {
         }
         throw new ActionNotAllowed();
     }
+
+    public List<UserInfo> getNotApprovedAgents() {
+        return userInfoRepository.findByAgentAndApprovedAgent(true, false);
+    }
+
+    public UserInfo approveAgent(UsernameWrapper userInfoDTO) {
+        UserInfo userInfo = userInfoRepository.findByUsername(userInfoDTO.getUsername());
+        userInfo.setApprovedAgent(true);
+        return userInfoRepository.save(userInfo);
+    }
+
+    public UserInfo rejectAgent(UsernameWrapper userInfoDTO) {
+        UserInfo userInfo = userInfoRepository.findByUsername(userInfoDTO.getUsername());
+        userInfo.setAgent(false);
+        return userInfoRepository.save(userInfo);
+    }
+
 }

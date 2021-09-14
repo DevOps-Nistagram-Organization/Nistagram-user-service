@@ -32,7 +32,8 @@ public class UserInfo {
 
     @Column
     private Boolean agent;
-
+    @Column
+    private Boolean approvedAgent;
     @Column
     private String imagePath;
 
@@ -216,5 +217,13 @@ public class UserInfo {
 
     public void setPublicProfile(Boolean publicProfile) {
         this.publicProfile = publicProfile;
+    }
+
+    public Boolean getApprovedAgent() {
+        return approvedAgent;
+    }
+
+    public void setApprovedAgent(Boolean approvedAgent) {
+        this.approvedAgent = approvedAgent;
     }
 }
