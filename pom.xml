@@ -16,6 +16,8 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<appName>user_service</appName>
+		<sonar.organization>devops-nistagram-organization</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<spring-cloud.version>2020.0.3</spring-cloud.version>
 	</properties>
 	<dependencies>
@@ -90,5 +92,12 @@
 		</plugins>
 		<finalName>${appName}</finalName>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>Nistagram User service GitHub Package</name>
+			<url>https://maven.pkg.github.com/DevOps-Nistagram-Organization/Nistagram-user-service</url>
+		</repository>
+	</distributionManagement>
 
 </project>
