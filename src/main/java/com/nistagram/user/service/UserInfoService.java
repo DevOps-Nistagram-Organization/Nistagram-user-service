@@ -41,6 +41,7 @@ public class UserInfoService {
         }
         UserInfo userInfo = UserInfoConverter.registerUserInfo(dto);
         userInfo.setPublicProfile(true);
+        userInfo.setApprovedAgent(false);
         return userInfoRepository.save(userInfo);
     }
 

@@ -14,6 +14,7 @@ public class UserInfoConverter {
 
     public static UserInfo registerUserInfo(UserInfoRegistrationDTO dto) {
         UserInfo userInfo = new UserInfo(dto.getUsername(), dto.getFirstName(), dto.getLastName(), dto.getEmail(), dto.getGender(), dto.getDateOfBirth(), dto.getAgent());
+        userInfo.setWebsite(dto.getWebsite());
         return userInfo;
     }
 
@@ -86,6 +87,7 @@ public class UserInfoConverter {
         userInfoDTO.setWebsite(info.getWebsite());
         return userInfoDTO;
     }
+
     public static UserInfoDTO toDTO(UserInfo info) {
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         userInfoDTO.setAgent(info.getAgent());
