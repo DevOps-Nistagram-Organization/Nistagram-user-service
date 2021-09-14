@@ -1,0 +1,15 @@
+# The dependencies downloading is moved out via an intermediate base image.
+# You don’t have to build the base image frequently it can be a scheduled operation
+# nightly or weekly depending on the dependencies update in your pom.xml.
+FROM maven:3.6.3-ibmjava-8-alpine
+ARG STAGE=dev
+LABEL maintainer="stevicdule@gmail.com"
+
+# Create app directory. This directory must have the same name as the directory in
+# Dockerfile file /usr/src/user_service. Our application will be copied in the
+# same directory where mvn dependencies are installed
+WORKDIR /usr/src/user_service
+COPY pom.xml .
+# Install app dependencies
+RUN mvn dependency:go-offline -P${STAGE} -DskipTests
+
