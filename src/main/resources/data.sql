@@ -1,0 +1,1 @@
+INSERT INTO user_info (`id`, `agent`, `date_of_birth`, `email`, `first_name`, `gender`, `image_path`, `last_name`, `public_profile`, `username`) VALUES ('1001', 0, '1997-09-15 00:00:00.000000', 'admin@nistagram.com', 'Adminko', 'Male', 'http://res.cloudinary.com/detmeun2w/image/upload/v1630856733/agent/yoopr2ypsxpn0vzu3wrw.jpg', 'Adminic', 1, 'Admin');
