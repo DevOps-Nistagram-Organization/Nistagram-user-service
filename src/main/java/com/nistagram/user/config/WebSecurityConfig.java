@@ -15,6 +15,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import java.util.Arrays;
 
 
 @Configuration
@@ -44,6 +48,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
 
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(false);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.setExposedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Location", "X-Requested-With", "Authorization", "Cache-Control", "Content-Type", "X-Total-Count", "allowedOriginPatterns"));
+        config.addAllowedMethod(HttpMethod.OPTIONS.name());
+        config.addAllowedMethod(HttpMethod.GET.name());
+        config.addAllowedMethod(HttpMethod.PUT.name());
+        config.addAllowedMethod(HttpMethod.POST.name());
+        config.addAllowedMethod(HttpMethod.DELETE.name());
+        source.registerCorsConfiguration("/**", config);
+        return new org.springframework.web.filter.CorsFilter(source);
+    }
 
     // Defining access rights to specific URLs
     @Override
@@ -68,7 +88,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // intercept every request and add filter
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-        http.csrf().disable();
+        //http.csrf().disable();
+        http.cors().and().csrf().disable();
 
 		/* http.headers().addHeaderWriter(
                  new StaticHeadersWriter("Access-Control-Allow-Origin", "*"));*/
