@@ -88,7 +88,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // intercept every request and add filter
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-        //http.csrf().disable();
+        //http.csrf().disable(); 
         http.cors().and().csrf().disable();
 
 		/* http.headers().addHeaderWriter(
